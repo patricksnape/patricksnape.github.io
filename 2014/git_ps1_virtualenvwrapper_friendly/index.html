@@ -1,0 +1,154 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="patricksnape, PhD Candidate at Imperial College London">
+
+
+        <title>Making __git_ps1 and virtualenvwrapper play nicely // patricksnape // PhD Candidate at Imperial College London</title>
+
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/pure/0.3.0/pure-min.css">
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/font-awesome/4.0.3/css/font-awesome.min.css">
+    <link rel="stylesheet" href="../../theme/css/pure.css">
+    <link rel="stylesheet" href="../../theme/css/pygments.css">
+
+    <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/fitvids/1.0.1/jquery.fitvids.min.js"></script>
+    <script>
+        $(document).ready(function(){
+            $(".content").fitVids();
+        });
+    </script>
+</head>
+
+<body>
+<div class="pure-g-r" id="layout">
+    <div class="sidebar sidebar-article pure-u">
+        <header class="header-article">
+            <hgroup>
+                <a href="../../author/patrick-snape.html" title="See posts by Patrick Snape">
+                    <img class="article-avatar" alt="Patrick Snape" src="http://www.gravatar.com/avatar/7818c1d65aa78a4f056ea0c39dc3716a">
+                </a>
+                <h2 class="article-info">Patrick Snape</h2>
+                <small class="about-author"></small>
+                <h5>Published</h5>
+                <p>Mon 21 April 2014</p>
+                <a href="/">&larr;Home</a>
+            </hgroup>
+        </header>
+    </div>
+    <div class="pure-u">
+        <div class="content">
+            <section class="post">
+                <header class="post-header">
+                    <h1>Making __git_ps1 and virtualenvwrapper play nicely</h1>
+                        <p class="post-meta">
+                            // under                                 <a class="post-category" href="../../tag/git.html">git</a>
+                                <a class="post-category" href="../../tag/python.html">python</a>
+                                <a class="post-category" href="../../tag/virtualenv.html">virtualenv</a>
+                        </p>
+                </header>
+            </section>
+            <p>I had to reinstall my ubuntu installation today after I completely broke
+it upgrading from 13.04 to 14.04. This meant that one of my first tasks
+was to reconfigure my shell how I liked it. Upon searching around, I found
+that the way I had been including the git branch status in my bash prompt
+had been superceded by the following new syntax:</p>
+<div class="highlight"><pre><span class="nb">export </span><span class="nv">GIT_PS1_SHOWUNTRACKEDFILES</span><span class="o">=</span>1
+<span class="nb">export </span><span class="nv">GIT_PS1_SHOWUPSTREAM</span><span class="o">=</span><span class="s2">&quot;auto&quot;</span>
+<span class="nb">export </span><span class="nv">GIT_PS1_SHOWCOLORHINTS</span><span class="o">=</span>1
+<span class="nb">export </span><span class="nv">GIT_PS1_SHOWDIRTYSTATE</span><span class="o">=</span>1
+
+<span class="nb">export </span><span class="nv">PROMPT_COMMAND</span><span class="o">=</span><span class="s1">&#39;__git_ps1&#39;</span>
+</pre></div>
+
+
+<p>which has a few nice updates to it! It will not only tell you which branch
+you are on, but it will also tell you the status of the branch AND colour
+it accordingly. Notice the use of <code>PROMPT_COMMAND</code> in order to allow
+the <code>__git_ps1</code> command to properly set colours in bash. <code>PROMPT_COMMAND</code>
+is a special bash command that is executed before every prompt is updated.
+Hence the syntax used (excluding the <code>$(...)</code>).</p>
+<p>Unfortunately, this messed up how virtualenvwrapper was displaying my 
+active virtualenv, which was no use to me at all. After some tinkering,
+I found two pieces of important information:</p>
+<ol>
+<li><code>__git_ps1</code> can take two parameters. The first a string to place
+     before the branch information, and the second a string to place after.</li>
+<li><code>PROMPT_COMMAND</code> can take a string of commands to call, seperated
+     by semicolons.</li>
+</ol>
+<p>Therefore, we can make a nice prompt that is friendly to both our git 
+status and our virtualenv status as follows:</p>
+<div class="highlight"><pre><span class="nb">export </span><span class="nv">GIT_PS1_SHOWUNTRACKEDFILES</span><span class="o">=</span>1
+<span class="nb">export </span><span class="nv">GIT_PS1_SHOWUPSTREAM</span><span class="o">=</span><span class="s2">&quot;auto&quot;</span>
+<span class="nb">export </span><span class="nv">GIT_PS1_SHOWCOLORHINTS</span><span class="o">=</span>1
+<span class="nb">export </span><span class="nv">GIT_PS1_SHOWDIRTYSTATE</span><span class="o">=</span>1
+<span class="nb">export </span><span class="nv">VIRTUAL_ENV_DISABLE_PROMPT</span><span class="o">=</span>1
+
+set_active_venv<span class="o">()</span> <span class="o">{</span>
+    <span class="nb">export </span><span class="nv">ACTIVE_VENV</span><span class="o">=</span><span class="s2">&quot;&quot;</span>
+    <span class="k">if</span> <span class="o">[</span> <span class="s2">&quot;$VIRTUAL_ENV&quot;</span> !<span class="o">=</span> <span class="s2">&quot;&quot;</span> <span class="o">]</span>; <span class="k">then</span>
+<span class="k">        </span><span class="nb">export </span><span class="nv">ACTIVE_VENV</span><span class="o">=</span><span class="s2">&quot;(`basename \&quot;$VIRTUAL_ENV\&quot;`)&quot;</span>
+    <span class="k">fi</span>
+<span class="o">}</span>
+
+<span class="nb">export </span><span class="nv">PROMPT_COMMAND</span><span class="o">=</span><span class="s1">&#39;set_active_venv; __git_ps1 &quot;${ACTIVE_VENV}\w&quot; &quot;\\\$ &quot;&#39;</span>
+</pre></div>
+
+
+<p>We have to set <code>VIRTUAL_ENV_DISABLE_PROMPT=1</code> in order to prevent virtualenvwrapper
+from providing its normal behaviour. We then just set our own environment variable to
+provide the same functionality!</p>
+            <div class="hr"></div>
+            <a href="#" class="go-top">Go Top</a>
+<div class="comments">
+    <div id="disqus_thread"></div>
+    <script type="text/javascript">
+        /* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
+        var disqus_shortname = "patricksnape"; // required: replace example with your forum shortname
+
+        /* * * DON'T EDIT BELOW THIS LINE * * */
+        (function() {
+            var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+            dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+            (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+        })();
+    </script>
+    <noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+    <a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+</div><footer class="footer">
+    <p>&copy; patricksnape &ndash;
+        Built with <a href="https://github.com/PurePelicanTheme/pure">Pure Theme</a>
+        for <a href="http://blog.getpelican.com/">Pelican</a>
+    </p>
+</footer>        </div>
+    </div>
+</div>
+    <script>
+        var $top = $('.go-top');
+
+        // Show or hide the sticky footer button
+        $(window).scroll(function() {
+            if ($(this).scrollTop() > 200) {
+                $top.fadeIn(200);
+            } else {
+                $top.fadeOut(200);
+            }
+        });
+
+        // Animate the scroll to top
+        $top.click(function(event) {
+            event.preventDefault();
+            $('html, body').animate({scrollTop: 0}, 300);
+        })
+
+        // Makes sure that the href="#" attached to the <a> elements
+        // don't scroll you back up the page.
+        $('body').on('click', 'a[href="#"]', function(event) {
+            event.preventDefault();
+        });
+    </script>
+</body>
+</html>

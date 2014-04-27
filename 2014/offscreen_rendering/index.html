@@ -1,0 +1,221 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="patricksnape, PhD Candidate at Imperial College London">
+
+
+        <title>Offscreen Rendering In Linux // patricksnape // PhD Candidate at Imperial College London</title>
+
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/pure/0.3.0/pure-min.css">
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/font-awesome/4.0.3/css/font-awesome.min.css">
+    <link rel="stylesheet" href="../../theme/css/pure.css">
+    <link rel="stylesheet" href="../../theme/css/pygments.css">
+
+    <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/fitvids/1.0.1/jquery.fitvids.min.js"></script>
+    <script>
+        $(document).ready(function(){
+            $(".content").fitVids();
+        });
+    </script>
+</head>
+
+<body>
+<div class="pure-g-r" id="layout">
+    <div class="sidebar sidebar-article pure-u">
+        <header class="header-article">
+            <hgroup>
+                <a href="../../author/patrick-snape.html" title="See posts by Patrick Snape">
+                    <img class="article-avatar" alt="Patrick Snape" src="http://www.gravatar.com/avatar/7818c1d65aa78a4f056ea0c39dc3716a">
+                </a>
+                <h2 class="article-info">Patrick Snape</h2>
+                <small class="about-author"></small>
+                <h5>Published</h5>
+                <p>Sat 11 January 2014</p>
+                <a href="/">&larr;Home</a>
+            </hgroup>
+        </header>
+    </div>
+    <div class="pure-u">
+        <div class="content">
+            <section class="post">
+                <header class="post-header">
+                    <h1>Offscreen Rendering In Linux</h1>
+                        <p class="post-meta">
+                            // under                                 <a class="post-category" href="../../tag/offscreen.html">offscreen</a>
+                                <a class="post-category" href="../../tag/llvmpipe.html">llvmpipe</a>
+                                <a class="post-category" href="../../tag/vtk.html">vtk</a>
+                                <a class="post-category" href="../../tag/linux.html">linux</a>
+                        </p>
+                </header>
+            </section>
+            <p>One of the techniques that I've been investigating recently, called <a href="http://www.cs.cmu.edu/~efros/courses/AP06/Papers/Blanz-siggraph-99.pdf">Morphable Models</a>, involves optimising the position and appearance of a 3D model in relation to a single image. In particular, the model must be rasterized in to the scene to allow for optimising over the accuracy of the fitting. This rasterisation step is reasonably easy, but something that I wanted to be able to run on a headless Linux (Ubuntu) cluster. Unfortunately, this machine does not contain a graphics card. Therefore, I thought it would be good to layout the differences between different types of 'headless' rendering, and what exactly they mean.</p>
+<p>The term headless rendering (or offscreen rendering), seems to imply a number of differing rendering choices. ‘Headless rendering’ might involve rendering a scene:</p>
+<ul>
+<li>Without showing a window</li>
+<li>On a headless server (no active window manager)</li>
+<li>Without any graphics card (software rendering)</li>
+</ul>
+<p>Each of these options obviously requires a different solution. In the next few sections I'm going to give a practical example of getting each type of 'headless' rendering working using <a href="http://www.vtk.org/">VTK</a>, and in particlar, <a href="http://code.enthought.com/projects/mayavi/">Mayavi</a>.</p>
+<p>Unfortunately, the way to do these things changes a lot between VTK versions. I have chosen VTK 5.8 because I am particularly interested in using it for offscreen rendering using Mayavi in Python and Mayavi only (at the time of writing) supports VTK 5.8. Therefore, my examples will assume that we are attempting to use VTK 5.8.</p>
+<h2>Without showing a window</h2>
+<p>This is exactly the same as the example given in the Mayavi documentation:</p>
+<div class="highlight"><pre><span class="kn">from</span> <span class="nn">mayavi</span> <span class="kn">import</span> <span class="n">mlab</span>
+<span class="n">mlab</span><span class="o">.</span><span class="n">options</span><span class="o">.</span><span class="n">offscreen</span> <span class="o">=</span> <span class="bp">True</span>
+<span class="n">mlab</span><span class="o">.</span><span class="n">test_contour3d</span><span class="p">()</span>
+<span class="n">mlab</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="s">&#39;example.png&#39;</span><span class="p">)</span>
+</pre></div>
+
+
+<p>This just involves setting the offscreen option to <code>True</code>. However, this assume that you are rendering inside an active X11 session. This obviously implies the existence of a graphics card!</p>
+<h2>On a headless server (no X11)</h2>
+<p>This, as documented in the Mayavi documentation, involves providing a virtual X11 buffer. This requires the command <code>xvfb-run</code>, which can be installed using <code>apt-get</code>:</p>
+<div class="highlight"><pre>sudo apt-get install xvfb
+</pre></div>
+
+
+<p>Once installed, a virtual X11 frame buffer can be provided with the command:</p>
+<div class="highlight"><pre>xvfb-run --server-args<span class="o">=</span><span class="s2">&quot;-screen 0 1024x768x24&quot;</span> python my_script.py
+</pre></div>
+
+
+<p>You will still probably want to use the offscreen flag as previously shown!</p>
+<h2>Software rendering</h2>
+<p>This is when things start to get particularly tricky. In the case, we need to compile a custom version of VTK 5.8 that is linked against an appropriate software renderer. In the case of Linux, this is OSMesa. Now, given that we are running on Linux, we will want to use the fastest software rasterizer we can, which is llvmpipe. Therefore, we begin the complex process of building VTK 5.8 with offscreen rendering support. I was unable to generalise this process, and only able to get it working for very specific versions of the requisite libraries. Confirmation of using more recent versions is greatly appreciated.</p>
+<h3>Building OSMesa</h3>
+<p>Download OSMesa 9.2.3 from <a href="ftp://ftp.freedesktop.org/pub/mesa/9.2.3/MesaLib-9.2.3.tar.bz2">here</a>. You will need to make sure you have all the dependencies as outlined <a href="http://www.mesa3d.org/install.html">here</a>, but most probably, for Ubuntu, you will need</p>
+<div class="highlight"><pre>sudo apt-get install scons flex bison
+</pre></div>
+
+
+<p>You will also need LLVM with version greater than 3.0. I managed to get it working by installing LLVM 3.2 (though I think 3.3 works as well):</p>
+<div class="highlight"><pre>sudo apt-get install llvm-3.2-dev llvm-3.2-source
+</pre></div>
+
+
+<p>Given that we got this from aptitude, it doesn’t seem to setup LLVM properly, so we need to set up the correct sumbolic link to <code>llvm-config</code>:</p>
+<div class="highlight"><pre>sudo ln -s /usr/bin/llvm-config-3.2 /usr/local/bin/llvm-config
+</pre></div>
+
+
+<p>We can then build llvmpipe by navigating in to the extracted OSMesa folder and executing:</p>
+<div class="highlight"><pre>scons <span class="nv">llvm</span><span class="o">=</span>yes <span class="nv">build</span><span class="o">=</span>release mesa osmesa libgl-xlib
+</pre></div>
+
+
+<p>Which has then successfully built llvmpipe and OSMesa.</p>
+<h3>Building Offscren VTK 5.8</h3>
+<p>Download VTK 5.8 from <a href="http://www.vtk.org/files/release/5.8/vtk-5.8.0.tar.gz">here</a>.</p>
+<p>Unzip it, make a folder called <code>build</code> inside it and then create a new script inside <code>build</code> called <code>configure_cmake.sh</code>.</p>
+<p>Inside, paste the following script:</p>
+<div class="highlight"><pre><span class="nv">MESA_INSTALL_PREFIX</span><span class="o">=</span>PATH_TO_MESA_9.2.3_FOLDER
+
+cmake <span class="se">\</span>
+ -DBUILD_SHARED_LIBS<span class="o">=</span>ON <span class="se">\</span>
+ -DVTK_WRAP_PYTHON<span class="o">=</span>ON <span class="se">\</span>
+ -DVTK_USE_X<span class="o">=</span>OFF <span class="se">\</span>
+ -DOPENGL_INCLUDE_DIR<span class="o">=</span><span class="k">${</span><span class="nv">MESA_INSTALL_PREFIX</span><span class="k">}</span>/include <span class="se">\</span>
+ -DOPENGL_gl_LIBRARY<span class="o">=</span><span class="k">${</span><span class="nv">MESA_INSTALL_PREFIX</span><span class="k">}</span>/build/linux-x86_64/gallium/targets/libgl-xlib/libGL.so <span class="se">\</span>
+ -DOPENGL_glu_LIBRARY<span class="o">=</span>/usr/lib/x86_64-linux-gnu/libGLU.so <span class="se">\</span>
+ -DVTK_OPENGL_HAS_OSMESA<span class="o">=</span>ON <span class="se">\</span>
+ -DOSMESA_INCLUDE_DIR<span class="o">=</span><span class="k">${</span><span class="nv">MESA_INSTALL_PREFIX</span><span class="k">}</span>/include <span class="se">\</span>
+ -DOSMESA_LIBRARY<span class="o">=</span><span class="k">${</span><span class="nv">MESA_INSTALL_PREFIX</span><span class="k">}</span>/build/linux-x86_64/mesa/drivers/osmesa/libosmesa.so <span class="se">\</span>
+ ..
+</pre></div>
+
+
+<p>Where <code>MESA_INSTALL_PREFIX</code> is the absolute path to wherever you extracted the OSMesa archive.</p>
+<p>You can then run <code>make</code> to make VTK, which takes a while. You may want to use the <code>-j</code> switch to <a href="http://make.paulandlesley.org/jobserver.html">decrease compile times</a>.</p>
+<p>Once VTK is finished, we can set up a virtualenv to use the offscreen VTK.</p>
+<h3>Setting up Mayavi</h3>
+<p>Create a virtualenv, then <code>cd</code> to <code>PATH_TO_VTK5.8/build/Wrapping/Python</code>, where <code>PATH_TO_VTK5.8</code> is the absolute path to wherever you built VTK 5.8.</p>
+<p>You can then install it in to the virtualenv by running</p>
+<div class="highlight"><pre><span class="nv">LD_LIBRARY_PATH</span><span class="o">=</span>PATH_TO_VTK5.8/build/bin/ python setup.py install
+</pre></div>
+
+
+<p>Then, to test it worked, run</p>
+<div class="highlight"><pre><span class="nv">LD_LIBRARY_PATH</span><span class="o">=</span>/PATH_TO_VTK5.8/build/bin/ python
+</pre></div>
+
+
+<p>Then try</p>
+<div class="highlight"><pre><span class="kn">import</span> <span class="nn">vtk</span>
+</pre></div>
+
+
+<p>which should work without error. Then install mayavi by running</p>
+<div class="highlight"><pre>pip install numpy
+
+<span class="nv">LD_LIBRARY_PATH</span><span class="o">=</span>/PATH_TO_VTK5.8/build/bin/ pip install mayavi
+</pre></div>
+
+
+<p>Then, we can test everything worked by running</p>
+<div class="highlight"><pre><span class="nv">LD_LIBRARY_PATH</span><span class="o">=</span>/PATH_TO_VTK5.8/build/bin/ python
+</pre></div>
+
+
+<p>and trying</p>
+<div class="highlight"><pre><span class="kn">from</span> <span class="nn">mayavi</span> <span class="kn">import</span> <span class="n">mlab</span>
+<span class="n">mlab</span><span class="o">.</span><span class="n">options</span><span class="o">.</span><span class="n">offscreen</span> <span class="o">=</span> <span class="bp">True</span>
+<span class="n">mlab</span><span class="o">.</span><span class="n">test_contour3d</span><span class="p">()</span>
+<span class="n">mlab</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="s">&#39;example.png&#39;</span><span class="p">)</span>
+</pre></div>
+
+
+<p>which should successfully create the image!</p>
+<p>In order to avoid pre-pending every command with <code>LD_LIBRARY_PATH=/PATH_TO_VTK5.8/build/bin/</code>, you can update your <code>LD_LIBRARY_PATH</code> using any of the normal ways on Linux (creating a conf file in <code>/etc/ld.so.conf.d/</code> or updating your <code>.bashrc</code> file).</p>
+            <div class="hr"></div>
+            <a href="#" class="go-top">Go Top</a>
+<div class="comments">
+    <div id="disqus_thread"></div>
+    <script type="text/javascript">
+        /* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
+        var disqus_shortname = "patricksnape"; // required: replace example with your forum shortname
+
+        /* * * DON'T EDIT BELOW THIS LINE * * */
+        (function() {
+            var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+            dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+            (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+        })();
+    </script>
+    <noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+    <a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+</div><footer class="footer">
+    <p>&copy; patricksnape &ndash;
+        Built with <a href="https://github.com/PurePelicanTheme/pure">Pure Theme</a>
+        for <a href="http://blog.getpelican.com/">Pelican</a>
+    </p>
+</footer>        </div>
+    </div>
+</div>
+    <script>
+        var $top = $('.go-top');
+
+        // Show or hide the sticky footer button
+        $(window).scroll(function() {
+            if ($(this).scrollTop() > 200) {
+                $top.fadeIn(200);
+            } else {
+                $top.fadeOut(200);
+            }
+        });
+
+        // Animate the scroll to top
+        $top.click(function(event) {
+            event.preventDefault();
+            $('html, body').animate({scrollTop: 0}, 300);
+        })
+
+        // Makes sure that the href="#" attached to the <a> elements
+        // don't scroll you back up the page.
+        $('body').on('click', 'a[href="#"]', function(event) {
+            event.preventDefault();
+        });
+    </script>
+</body>
+</html>
