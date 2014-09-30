@@ -1,0 +1,183 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom"><title>patricksnape</title><link href="http://patricksnape.github.io/" rel="alternate"></link><link href="http://patricksnape.github.io/feeds/patrick-snape.atom.xml" rel="self"></link><id>http://patricksnape.github.io/</id><updated>2014-05-07T00:00:00+01:00</updated><entry><title>Matlab Ubuntu Unity Launcher</title><link href="http://patricksnape.github.io/2014/matlab_unity_launcher/" rel="alternate"></link><updated>2014-05-07T00:00:00+01:00</updated><author><name>Patrick Snape</name></author><id>tag:patricksnape.github.io,2014-05-07:2014/matlab_unity_launcher/</id><summary type="html">&lt;p&gt;I was having some trouble getting Matlab to play nicely with the Unity launcher
+in Ubuntu. It seems as though Matlab requires you to pass the &lt;code&gt;-desktop&lt;/code&gt; flag
+on Linux. The default behaviour seems to be something along the lines of show
+the splash screen and then close. Therefore, in order to make the launcher work 
+properly, I proceeded as follows:&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;Install Matlab as per it's instructions&lt;/li&gt;
+&lt;li&gt;Add &lt;code&gt;/usr/local/MATLAB/R2014a/bin&lt;/code&gt; to &lt;code&gt;PATH&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;Launch &lt;code&gt;matlab&lt;/code&gt; in a terminal&lt;/li&gt;
+&lt;li&gt;Right click Matlab in the launcher and choose &lt;code&gt;Lock To Launcher&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;Close Matlab, a launcher icon should stay (though it won't work properly)&lt;/li&gt;
+&lt;li&gt;Edit the file &lt;code&gt;~/.local/share/applications/com-mathworks-util-postvminit.desktop&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;Add &lt;code&gt;-desktop&lt;/code&gt; to the end of the line &lt;code&gt;Exec=/usr/local/MATLAB/R2014a/bin/glnxa64/MATLAB -desktop&lt;/code&gt;&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;Note that these instructions should work for any version of Matlab (just change
+the path appropriately).&lt;/p&gt;</summary><category term="matlab"></category><category term="unity"></category><category term="ubuntu"></category></entry><entry><title>Making __git_ps1 and virtualenvwrapper play nicely</title><link href="http://patricksnape.github.io/2014/git_ps1_virtualenvwrapper_friendly/" rel="alternate"></link><updated>2014-04-21T00:00:00+01:00</updated><author><name>Patrick Snape</name></author><id>tag:patricksnape.github.io,2014-04-21:2014/git_ps1_virtualenvwrapper_friendly/</id><summary type="html">&lt;p&gt;I had to reinstall my ubuntu installation today after I completely broke
+it upgrading from 13.04 to 14.04. This meant that one of my first tasks
+was to reconfigure my shell how I liked it. Upon searching around, I found
+that the way I had been including the git branch status in my bash prompt
+had been superceded by the following new syntax:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span class="nb"&gt;export &lt;/span&gt;&lt;span class="nv"&gt;GIT_PS1_SHOWUNTRACKEDFILES&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;1
+&lt;span class="nb"&gt;export &lt;/span&gt;&lt;span class="nv"&gt;GIT_PS1_SHOWUPSTREAM&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s2"&gt;&amp;quot;auto&amp;quot;&lt;/span&gt;
+&lt;span class="nb"&gt;export &lt;/span&gt;&lt;span class="nv"&gt;GIT_PS1_SHOWCOLORHINTS&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;1
+&lt;span class="nb"&gt;export &lt;/span&gt;&lt;span class="nv"&gt;GIT_PS1_SHOWDIRTYSTATE&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;1
+
+&lt;span class="nb"&gt;export &lt;/span&gt;&lt;span class="nv"&gt;PROMPT_COMMAND&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;__git_ps1&amp;#39;&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;which has a few nice updates to it! It will not only tell you which branch
+you are on, but it will also tell you the status of the branch AND colour
+it accordingly. Notice the use of &lt;code&gt;PROMPT_COMMAND&lt;/code&gt; in order to allow
+the &lt;code&gt;__git_ps1&lt;/code&gt; command to properly set colours in bash. &lt;code&gt;PROMPT_COMMAND&lt;/code&gt;
+is a special bash command that is executed before every prompt is updated.
+Hence the syntax used (excluding the &lt;code&gt;$(...)&lt;/code&gt;).&lt;/p&gt;
+&lt;p&gt;Unfortunately, this messed up how virtualenvwrapper was displaying my 
+active virtualenv, which was no use to me at all. After some tinkering,
+I found two pieces of important information:&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;&lt;code&gt;__git_ps1&lt;/code&gt; can take two parameters. The first a string to place
+     before the branch information, and the second a string to place after.&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;PROMPT_COMMAND&lt;/code&gt; can take a string of commands to call, seperated
+     by semicolons.&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;Therefore, we can make a nice prompt that is friendly to both our git 
+status and our virtualenv status as follows:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span class="nb"&gt;export &lt;/span&gt;&lt;span class="nv"&gt;GIT_PS1_SHOWUNTRACKEDFILES&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;1
+&lt;span class="nb"&gt;export &lt;/span&gt;&lt;span class="nv"&gt;GIT_PS1_SHOWUPSTREAM&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s2"&gt;&amp;quot;auto&amp;quot;&lt;/span&gt;
+&lt;span class="nb"&gt;export &lt;/span&gt;&lt;span class="nv"&gt;GIT_PS1_SHOWCOLORHINTS&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;1
+&lt;span class="nb"&gt;export &lt;/span&gt;&lt;span class="nv"&gt;GIT_PS1_SHOWDIRTYSTATE&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;1
+&lt;span class="nb"&gt;export &lt;/span&gt;&lt;span class="nv"&gt;VIRTUAL_ENV_DISABLE_PROMPT&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;1
+
+set_active_venv&lt;span class="o"&gt;()&lt;/span&gt; &lt;span class="o"&gt;{&lt;/span&gt;
+    &lt;span class="nb"&gt;export &lt;/span&gt;&lt;span class="nv"&gt;ACTIVE_VENV&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s2"&gt;&amp;quot;&amp;quot;&lt;/span&gt;
+    &lt;span class="k"&gt;if&lt;/span&gt; &lt;span class="o"&gt;[&lt;/span&gt; &lt;span class="s2"&gt;&amp;quot;$VIRTUAL_ENV&amp;quot;&lt;/span&gt; !&lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="s2"&gt;&amp;quot;&amp;quot;&lt;/span&gt; &lt;span class="o"&gt;]&lt;/span&gt;; &lt;span class="k"&gt;then&lt;/span&gt;
+&lt;span class="k"&gt;        &lt;/span&gt;&lt;span class="nb"&gt;export &lt;/span&gt;&lt;span class="nv"&gt;ACTIVE_VENV&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s2"&gt;&amp;quot;(`basename \&amp;quot;$VIRTUAL_ENV\&amp;quot;`)&amp;quot;&lt;/span&gt;
+    &lt;span class="k"&gt;fi&lt;/span&gt;
+&lt;span class="o"&gt;}&lt;/span&gt;
+
+&lt;span class="nb"&gt;export &lt;/span&gt;&lt;span class="nv"&gt;PROMPT_COMMAND&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;set_active_venv; __git_ps1 &amp;quot;${ACTIVE_VENV}\w&amp;quot; &amp;quot;\\\$ &amp;quot;&amp;#39;&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;We have to set &lt;code&gt;VIRTUAL_ENV_DISABLE_PROMPT=1&lt;/code&gt; in order to prevent virtualenvwrapper
+from providing its normal behaviour. We then just set our own environment variable to
+provide the same functionality!&lt;/p&gt;</summary><category term="git"></category><category term="python"></category><category term="virtualenv"></category></entry><entry><title>Offscreen Rendering In Linux</title><link href="http://patricksnape.github.io/2014/offscreen_rendering/" rel="alternate"></link><updated>2014-01-11T00:00:00+00:00</updated><author><name>Patrick Snape</name></author><id>tag:patricksnape.github.io,2014-01-11:2014/offscreen_rendering/</id><summary type="html">&lt;p&gt;One of the techniques that I've been investigating recently, called &lt;a href="http://www.cs.cmu.edu/~efros/courses/AP06/Papers/Blanz-siggraph-99.pdf"&gt;Morphable Models&lt;/a&gt;, involves optimising the position and appearance of a 3D model in relation to a single image. In particular, the model must be rasterized in to the scene to allow for optimising over the accuracy of the fitting. This rasterisation step is reasonably easy, but something that I wanted to be able to run on a headless Linux (Ubuntu) cluster. Unfortunately, this machine does not contain a graphics card. Therefore, I thought it would be good to layout the differences between different types of 'headless' rendering, and what exactly they mean.&lt;/p&gt;
+&lt;p&gt;The term headless rendering (or offscreen rendering), seems to imply a number of differing rendering choices. ‘Headless rendering’ might involve rendering a scene:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;Without showing a window&lt;/li&gt;
+&lt;li&gt;On a headless server (no active window manager)&lt;/li&gt;
+&lt;li&gt;Without any graphics card (software rendering)&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;Each of these options obviously requires a different solution. In the next few sections I'm going to give a practical example of getting each type of 'headless' rendering working using &lt;a href="http://www.vtk.org/"&gt;VTK&lt;/a&gt;, and in particlar, &lt;a href="http://code.enthought.com/projects/mayavi/"&gt;Mayavi&lt;/a&gt;.&lt;/p&gt;
+&lt;p&gt;Unfortunately, the way to do these things changes a lot between VTK versions. I have chosen VTK 5.8 because I am particularly interested in using it for offscreen rendering using Mayavi in Python and Mayavi only (at the time of writing) supports VTK 5.8. Therefore, my examples will assume that we are attempting to use VTK 5.8.&lt;/p&gt;
+&lt;h2&gt;Without showing a window&lt;/h2&gt;
+&lt;p&gt;This is exactly the same as the example given in the Mayavi documentation:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span class="kn"&gt;from&lt;/span&gt; &lt;span class="nn"&gt;mayavi&lt;/span&gt; &lt;span class="kn"&gt;import&lt;/span&gt; &lt;span class="n"&gt;mlab&lt;/span&gt;
+&lt;span class="n"&gt;mlab&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;options&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;offscreen&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="bp"&gt;True&lt;/span&gt;
+&lt;span class="n"&gt;mlab&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;test_contour3d&lt;/span&gt;&lt;span class="p"&gt;()&lt;/span&gt;
+&lt;span class="n"&gt;mlab&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;savefig&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s"&gt;&amp;#39;example.png&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;This just involves setting the offscreen option to &lt;code&gt;True&lt;/code&gt;. However, this assume that you are rendering inside an active X11 session. This obviously implies the existence of a graphics card!&lt;/p&gt;
+&lt;h2&gt;On a headless server (no X11)&lt;/h2&gt;
+&lt;p&gt;This, as documented in the Mayavi documentation, involves providing a virtual X11 buffer. This requires the command &lt;code&gt;xvfb-run&lt;/code&gt;, which can be installed using &lt;code&gt;apt-get&lt;/code&gt;:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;sudo apt-get install xvfb
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;Once installed, a virtual X11 frame buffer can be provided with the command:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;xvfb-run --server-args&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s2"&gt;&amp;quot;-screen 0 1024x768x24&amp;quot;&lt;/span&gt; python my_script.py
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;You will still probably want to use the offscreen flag as previously shown!&lt;/p&gt;
+&lt;h2&gt;Software rendering&lt;/h2&gt;
+&lt;p&gt;This is when things start to get particularly tricky. In the case, we need to compile a custom version of VTK 5.8 that is linked against an appropriate software renderer. In the case of Linux, this is OSMesa. Now, given that we are running on Linux, we will want to use the fastest software rasterizer we can, which is llvmpipe. Therefore, we begin the complex process of building VTK 5.8 with offscreen rendering support. I was unable to generalise this process, and only able to get it working for very specific versions of the requisite libraries. Confirmation of using more recent versions is greatly appreciated.&lt;/p&gt;
+&lt;h3&gt;Building OSMesa&lt;/h3&gt;
+&lt;p&gt;Download OSMesa 9.2.3 from &lt;a href="ftp://ftp.freedesktop.org/pub/mesa/9.2.3/MesaLib-9.2.3.tar.bz2"&gt;here&lt;/a&gt;. You will need to make sure you have all the dependencies as outlined &lt;a href="http://www.mesa3d.org/install.html"&gt;here&lt;/a&gt;, but most probably, for Ubuntu, you will need&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;sudo apt-get install scons flex bison
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;You will also need LLVM with version greater than 3.0. I managed to get it working by installing LLVM 3.2 (though I think 3.3 works as well):&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;sudo apt-get install llvm-3.2-dev llvm-3.2-source
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;Given that we got this from aptitude, it doesn’t seem to setup LLVM properly, so we need to set up the correct sumbolic link to &lt;code&gt;llvm-config&lt;/code&gt;:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;sudo ln -s /usr/bin/llvm-config-3.2 /usr/local/bin/llvm-config
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;We can then build llvmpipe by navigating in to the extracted OSMesa folder and executing:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;scons &lt;span class="nv"&gt;llvm&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;yes &lt;span class="nv"&gt;build&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;release mesa osmesa libgl-xlib
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;Which has then successfully built llvmpipe and OSMesa.&lt;/p&gt;
+&lt;h3&gt;Building Offscren VTK 5.8&lt;/h3&gt;
+&lt;p&gt;Download VTK 5.8 from &lt;a href="http://www.vtk.org/files/release/5.8/vtk-5.8.0.tar.gz"&gt;here&lt;/a&gt;.&lt;/p&gt;
+&lt;p&gt;Unzip it, make a folder called &lt;code&gt;build&lt;/code&gt; inside it and then create a new script inside &lt;code&gt;build&lt;/code&gt; called &lt;code&gt;configure_cmake.sh&lt;/code&gt;.&lt;/p&gt;
+&lt;p&gt;Inside, paste the following script:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span class="nv"&gt;MESA_INSTALL_PREFIX&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;PATH_TO_MESA_9.2.3_FOLDER
+
+cmake &lt;span class="se"&gt;\&lt;/span&gt;
+ -DBUILD_SHARED_LIBS&lt;span class="o"&gt;=&lt;/span&gt;ON &lt;span class="se"&gt;\&lt;/span&gt;
+ -DVTK_WRAP_PYTHON&lt;span class="o"&gt;=&lt;/span&gt;ON &lt;span class="se"&gt;\&lt;/span&gt;
+ -DVTK_USE_X&lt;span class="o"&gt;=&lt;/span&gt;OFF &lt;span class="se"&gt;\&lt;/span&gt;
+ -DOPENGL_INCLUDE_DIR&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="k"&gt;${&lt;/span&gt;&lt;span class="nv"&gt;MESA_INSTALL_PREFIX&lt;/span&gt;&lt;span class="k"&gt;}&lt;/span&gt;/include &lt;span class="se"&gt;\&lt;/span&gt;
+ -DOPENGL_gl_LIBRARY&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="k"&gt;${&lt;/span&gt;&lt;span class="nv"&gt;MESA_INSTALL_PREFIX&lt;/span&gt;&lt;span class="k"&gt;}&lt;/span&gt;/build/linux-x86_64/gallium/targets/libgl-xlib/libGL.so &lt;span class="se"&gt;\&lt;/span&gt;
+ -DOPENGL_glu_LIBRARY&lt;span class="o"&gt;=&lt;/span&gt;/usr/lib/x86_64-linux-gnu/libGLU.so &lt;span class="se"&gt;\&lt;/span&gt;
+ -DVTK_OPENGL_HAS_OSMESA&lt;span class="o"&gt;=&lt;/span&gt;ON &lt;span class="se"&gt;\&lt;/span&gt;
+ -DOSMESA_INCLUDE_DIR&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="k"&gt;${&lt;/span&gt;&lt;span class="nv"&gt;MESA_INSTALL_PREFIX&lt;/span&gt;&lt;span class="k"&gt;}&lt;/span&gt;/include &lt;span class="se"&gt;\&lt;/span&gt;
+ -DOSMESA_LIBRARY&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="k"&gt;${&lt;/span&gt;&lt;span class="nv"&gt;MESA_INSTALL_PREFIX&lt;/span&gt;&lt;span class="k"&gt;}&lt;/span&gt;/build/linux-x86_64/mesa/drivers/osmesa/libosmesa.so &lt;span class="se"&gt;\&lt;/span&gt;
+ ..
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;Where &lt;code&gt;MESA_INSTALL_PREFIX&lt;/code&gt; is the absolute path to wherever you extracted the OSMesa archive.&lt;/p&gt;
+&lt;p&gt;You can then run &lt;code&gt;make&lt;/code&gt; to make VTK, which takes a while. You may want to use the &lt;code&gt;-j&lt;/code&gt; switch to &lt;a href="http://make.paulandlesley.org/jobserver.html"&gt;decrease compile times&lt;/a&gt;.&lt;/p&gt;
+&lt;p&gt;Once VTK is finished, we can set up a virtualenv to use the offscreen VTK.&lt;/p&gt;
+&lt;h3&gt;Setting up Mayavi&lt;/h3&gt;
+&lt;p&gt;Create a virtualenv, then &lt;code&gt;cd&lt;/code&gt; to &lt;code&gt;PATH_TO_VTK5.8/build/Wrapping/Python&lt;/code&gt;, where &lt;code&gt;PATH_TO_VTK5.8&lt;/code&gt; is the absolute path to wherever you built VTK 5.8.&lt;/p&gt;
+&lt;p&gt;You can then install it in to the virtualenv by running&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span class="nv"&gt;LD_LIBRARY_PATH&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;PATH_TO_VTK5.8/build/bin/ python setup.py install
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;Then, to test it worked, run&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span class="nv"&gt;LD_LIBRARY_PATH&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;/PATH_TO_VTK5.8/build/bin/ python
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;Then try&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span class="kn"&gt;import&lt;/span&gt; &lt;span class="nn"&gt;vtk&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;which should work without error. Then install mayavi by running&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;pip install numpy
+
+&lt;span class="nv"&gt;LD_LIBRARY_PATH&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;/PATH_TO_VTK5.8/build/bin/ pip install mayavi
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;Then, we can test everything worked by running&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span class="nv"&gt;LD_LIBRARY_PATH&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;/PATH_TO_VTK5.8/build/bin/ python
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;and trying&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span class="kn"&gt;from&lt;/span&gt; &lt;span class="nn"&gt;mayavi&lt;/span&gt; &lt;span class="kn"&gt;import&lt;/span&gt; &lt;span class="n"&gt;mlab&lt;/span&gt;
+&lt;span class="n"&gt;mlab&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;options&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;offscreen&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="bp"&gt;True&lt;/span&gt;
+&lt;span class="n"&gt;mlab&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;test_contour3d&lt;/span&gt;&lt;span class="p"&gt;()&lt;/span&gt;
+&lt;span class="n"&gt;mlab&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;savefig&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s"&gt;&amp;#39;example.png&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;which should successfully create the image!&lt;/p&gt;
+&lt;p&gt;In order to avoid pre-pending every command with &lt;code&gt;LD_LIBRARY_PATH=/PATH_TO_VTK5.8/build/bin/&lt;/code&gt;, you can update your &lt;code&gt;LD_LIBRARY_PATH&lt;/code&gt; using any of the normal ways on Linux (creating a conf file in &lt;code&gt;/etc/ld.so.conf.d/&lt;/code&gt; or updating your &lt;code&gt;.bashrc&lt;/code&gt; file).&lt;/p&gt;</summary><category term="offscreen"></category><category term="llvmpipe"></category><category term="vtk"></category><category term="linux"></category></entry></feed>
