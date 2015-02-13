@@ -1,5 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
-<feed xmlns="http://www.w3.org/2005/Atom"><title>patricksnape</title><link href="http://patricksnape.github.io/" rel="alternate"></link><link href="http://patricksnape.github.io/feeds/patrick-snape.atom.xml" rel="self"></link><id>http://patricksnape.github.io/</id><updated>2014-05-07T00:00:00+01:00</updated><entry><title>Matlab Ubuntu Unity Launcher</title><link href="http://patricksnape.github.io/2014/matlab_unity_launcher/" rel="alternate"></link><updated>2014-05-07T00:00:00+01:00</updated><author><name>Patrick Snape</name></author><id>tag:patricksnape.github.io,2014-05-07:2014/matlab_unity_launcher/</id><summary type="html">&lt;p&gt;I was having some trouble getting Matlab to play nicely with the Unity launcher
+<feed xmlns="http://www.w3.org/2005/Atom"><title>patricksnape</title><link href="http://patricksnape.github.io/" rel="alternate"></link><link href="http://patricksnape.github.io/feeds/patrick-snape.atom.xml" rel="self"></link><id>http://patricksnape.github.io/</id><updated>2015-02-13T00:00:00+00:00</updated><entry><title>Conda GLIBC_2.15 Error</title><link href="http://patricksnape.github.io/2015/conda_glibc/" rel="alternate"></link><updated>2015-02-13T00:00:00+00:00</updated><author><name>Patrick Snape</name></author><id>tag:patricksnape.github.io,2015-02-13:2015/conda_glibc/</id><summary type="html">&lt;p&gt;If, when using conda (Anaconda or Miniconda), you experience an error that is something like the following:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;ImportError: /home/pts08/miniconda/envs/_test/bin/../lib/libm.so.6: version `GLIBC_2.15&amp;#39; not found (required by /home/pts08/miniconda/envs/_test/lib/python2.7/site-packages/cyffld2/../../../libfftw3f.so.3)
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;You can quickly solve this by removing/moving the &lt;code&gt;libm.so.6&lt;/code&gt; library so that your packages don't accidentally link against it.&lt;/p&gt;
+&lt;p&gt;For example:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;mv /home/pts08/miniconda/envs/_test/bin/../lib/libm.so.6 /home/pts08/miniconda/envs/_test/bin/../lib/libm.so.6.bak
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;This problem is caused because conda ships with a package called &lt;code&gt;system&lt;/code&gt; that contains &lt;code&gt;libm&lt;/code&gt; (library for fast math calculations). However, the &lt;code&gt;libm.so&lt;/code&gt; version that it ships with is linked against an older version of GLIBC than was used to build the library that is failing to link. This causes a conflict which cannot be resolved and results in the not found error.&lt;/p&gt;</summary><category term="conda"></category><category term="python"></category><category term="glibc"></category></entry><entry><title>Matlab Ubuntu Unity Launcher</title><link href="http://patricksnape.github.io/2014/matlab_unity_launcher/" rel="alternate"></link><updated>2014-05-07T00:00:00+01:00</updated><author><name>Patrick Snape</name></author><id>tag:patricksnape.github.io,2014-05-07:2014/matlab_unity_launcher/</id><summary type="html">&lt;p&gt;I was having some trouble getting Matlab to play nicely with the Unity launcher
 in Ubuntu. It seems as though Matlab requires you to pass the &lt;code&gt;-desktop&lt;/code&gt; flag
 on Linux. The default behaviour seems to be something along the lines of show
 the splash screen and then close. Therefore, in order to make the launcher work 

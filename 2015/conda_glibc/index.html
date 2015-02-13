@@ -1,0 +1,115 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="patricksnape, PhD Candidate at Imperial College London">
+
+
+        <title>Conda GLIBC_2.15 Error // patricksnape // PhD Candidate at Imperial College London</title>
+
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/pure/0.3.0/pure-min.css">
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/font-awesome/4.0.3/css/font-awesome.min.css">
+    <link rel="stylesheet" href="../../theme/css/pure.css">
+    <link rel="stylesheet" href="../../theme/css/pygments.css">
+
+    <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/fitvids/1.0.1/jquery.fitvids.min.js"></script>
+    <script>
+        $(document).ready(function(){
+            $(".content").fitVids();
+        });
+    </script>
+</head>
+
+<body>
+<div class="pure-g-r" id="layout">
+    <div class="sidebar sidebar-article pure-u">
+        <header class="header-article">
+            <hgroup>
+                <a href="../../author/patrick-snape.html" title="See posts by Patrick Snape">
+                    <img class="article-avatar" alt="Patrick Snape" src="http://www.gravatar.com/avatar/7818c1d65aa78a4f056ea0c39dc3716a">
+                </a>
+                <h2 class="article-info">Patrick Snape</h2>
+                <small class="about-author"></small>
+                <h5>Published</h5>
+                <p>Fri 13 February 2015</p>
+                <a href="/">&larr;Home</a>
+            </hgroup>
+        </header>
+    </div>
+    <div class="pure-u">
+        <div class="content">
+            <section class="post">
+                <header class="post-header">
+                    <h1>Conda GLIBC_2.15 Error</h1>
+                        <p class="post-meta">
+                            // under                                 <a class="post-category" href="../../tag/conda.html">conda</a>
+                                <a class="post-category" href="../../tag/python.html">python</a>
+                                <a class="post-category" href="../../tag/glibc.html">glibc</a>
+                        </p>
+                </header>
+            </section>
+            <p>If, when using conda (Anaconda or Miniconda), you experience an error that is something like the following:</p>
+<div class="highlight"><pre>ImportError: /home/pts08/miniconda/envs/_test/bin/../lib/libm.so.6: version `GLIBC_2.15&#39; not found (required by /home/pts08/miniconda/envs/_test/lib/python2.7/site-packages/cyffld2/../../../libfftw3f.so.3)
+</pre></div>
+
+
+<p>You can quickly solve this by removing/moving the <code>libm.so.6</code> library so that your packages don't accidentally link against it.</p>
+<p>For example:</p>
+<div class="highlight"><pre>mv /home/pts08/miniconda/envs/_test/bin/../lib/libm.so.6 /home/pts08/miniconda/envs/_test/bin/../lib/libm.so.6.bak
+</pre></div>
+
+
+<p>This problem is caused because conda ships with a package called <code>system</code> that contains <code>libm</code> (library for fast math calculations). However, the <code>libm.so</code> version that it ships with is linked against an older version of GLIBC than was used to build the library that is failing to link. This causes a conflict which cannot be resolved and results in the not found error.</p>
+            <div class="hr"></div>
+            <a href="#" class="go-top">Go Top</a>
+<div class="comments">
+    <div id="disqus_thread"></div>
+    <script type="text/javascript">
+        /* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
+        var disqus_shortname = "patricksnape"; // required: replace example with your forum shortname
+
+        /* * * DON'T EDIT BELOW THIS LINE * * */
+        (function() {
+            var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+            dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+            (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+        })();
+    </script>
+    <noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+    <a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+</div><footer class="footer">
+    <p>&copy; patricksnape &ndash;
+        Built with <a href="https://github.com/PurePelicanTheme/pure">Pure Theme</a>
+        for <a href="http://blog.getpelican.com/">Pelican</a>
+    </p>
+</footer>        </div>
+    </div>
+</div>
+    <script>
+        var $top = $('.go-top');
+
+        // Show or hide the sticky footer button
+        $(window).scroll(function() {
+            if ($(this).scrollTop() > 200) {
+                $top.fadeIn(200);
+            } else {
+                $top.fadeOut(200);
+            }
+        });
+
+        // Animate the scroll to top
+        $top.click(function(event) {
+            event.preventDefault();
+            $('html, body').animate({scrollTop: 0}, 300);
+        })
+
+        // Makes sure that the href="#" attached to the <a> elements
+        // don't scroll you back up the page.
+        $('body').on('click', 'a[href="#"]', function(event) {
+            event.preventDefault();
+        });
+    </script>
+</body>
+</html>
