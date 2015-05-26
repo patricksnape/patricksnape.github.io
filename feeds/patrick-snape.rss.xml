@@ -64,8 +64,8 @@ status and our virtualenv status as follows:&lt;/p&gt;
 
 set_active_venv&lt;span class="o"&gt;()&lt;/span&gt; &lt;span class="o"&gt;{&lt;/span&gt;
     &lt;span class="nb"&gt;export &lt;/span&gt;&lt;span class="nv"&gt;ACTIVE_VENV&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s2"&gt;&amp;quot;&amp;quot;&lt;/span&gt;
-    &lt;span class="k"&gt;if&lt;/span&gt; &lt;span class="o"&gt;[&lt;/span&gt; &lt;span class="s2"&gt;&amp;quot;$VIRTUAL_ENV&amp;quot;&lt;/span&gt; !&lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="s2"&gt;&amp;quot;&amp;quot;&lt;/span&gt; &lt;span class="o"&gt;]&lt;/span&gt;; &lt;span class="k"&gt;then&lt;/span&gt;
-&lt;span class="k"&gt;        &lt;/span&gt;&lt;span class="nb"&gt;export &lt;/span&gt;&lt;span class="nv"&gt;ACTIVE_VENV&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s2"&gt;&amp;quot;(`basename \&amp;quot;$VIRTUAL_ENV\&amp;quot;`)&amp;quot;&lt;/span&gt;
+    &lt;span class="k"&gt;if&lt;/span&gt; &lt;span class="o"&gt;[&lt;/span&gt; &lt;span class="s2"&gt;&amp;quot;&lt;/span&gt;&lt;span class="nv"&gt;$VIRTUAL_ENV&lt;/span&gt;&lt;span class="s2"&gt;&amp;quot;&lt;/span&gt; !&lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="s2"&gt;&amp;quot;&amp;quot;&lt;/span&gt; &lt;span class="o"&gt;]&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt; &lt;span class="k"&gt;then&lt;/span&gt;
+        &lt;span class="nb"&gt;export &lt;/span&gt;&lt;span class="nv"&gt;ACTIVE_VENV&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s2"&gt;&amp;quot;(`basename \&amp;quot;&lt;/span&gt;&lt;span class="nv"&gt;$VIRTUAL_ENV&lt;/span&gt;&lt;span class="s2"&gt;\&amp;quot;`)&amp;quot;&lt;/span&gt;
     &lt;span class="k"&gt;fi&lt;/span&gt;
 &lt;span class="o"&gt;}&lt;/span&gt;
 
@@ -140,12 +140,12 @@ cmake &lt;span class="se"&gt;\&lt;/span&gt;
  -DBUILD_SHARED_LIBS&lt;span class="o"&gt;=&lt;/span&gt;ON &lt;span class="se"&gt;\&lt;/span&gt;
  -DVTK_WRAP_PYTHON&lt;span class="o"&gt;=&lt;/span&gt;ON &lt;span class="se"&gt;\&lt;/span&gt;
  -DVTK_USE_X&lt;span class="o"&gt;=&lt;/span&gt;OFF &lt;span class="se"&gt;\&lt;/span&gt;
- -DOPENGL_INCLUDE_DIR&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="k"&gt;${&lt;/span&gt;&lt;span class="nv"&gt;MESA_INSTALL_PREFIX&lt;/span&gt;&lt;span class="k"&gt;}&lt;/span&gt;/include &lt;span class="se"&gt;\&lt;/span&gt;
- -DOPENGL_gl_LIBRARY&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="k"&gt;${&lt;/span&gt;&lt;span class="nv"&gt;MESA_INSTALL_PREFIX&lt;/span&gt;&lt;span class="k"&gt;}&lt;/span&gt;/build/linux-x86_64/gallium/targets/libgl-xlib/libGL.so &lt;span class="se"&gt;\&lt;/span&gt;
+ -DOPENGL_INCLUDE_DIR&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="si"&gt;${&lt;/span&gt;&lt;span class="nv"&gt;MESA_INSTALL_PREFIX&lt;/span&gt;&lt;span class="si"&gt;}&lt;/span&gt;/include &lt;span class="se"&gt;\&lt;/span&gt;
+ -DOPENGL_gl_LIBRARY&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="si"&gt;${&lt;/span&gt;&lt;span class="nv"&gt;MESA_INSTALL_PREFIX&lt;/span&gt;&lt;span class="si"&gt;}&lt;/span&gt;/build/linux-x86_64/gallium/targets/libgl-xlib/libGL.so &lt;span class="se"&gt;\&lt;/span&gt;
  -DOPENGL_glu_LIBRARY&lt;span class="o"&gt;=&lt;/span&gt;/usr/lib/x86_64-linux-gnu/libGLU.so &lt;span class="se"&gt;\&lt;/span&gt;
  -DVTK_OPENGL_HAS_OSMESA&lt;span class="o"&gt;=&lt;/span&gt;ON &lt;span class="se"&gt;\&lt;/span&gt;
- -DOSMESA_INCLUDE_DIR&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="k"&gt;${&lt;/span&gt;&lt;span class="nv"&gt;MESA_INSTALL_PREFIX&lt;/span&gt;&lt;span class="k"&gt;}&lt;/span&gt;/include &lt;span class="se"&gt;\&lt;/span&gt;
- -DOSMESA_LIBRARY&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="k"&gt;${&lt;/span&gt;&lt;span class="nv"&gt;MESA_INSTALL_PREFIX&lt;/span&gt;&lt;span class="k"&gt;}&lt;/span&gt;/build/linux-x86_64/mesa/drivers/osmesa/libosmesa.so &lt;span class="se"&gt;\&lt;/span&gt;
+ -DOSMESA_INCLUDE_DIR&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="si"&gt;${&lt;/span&gt;&lt;span class="nv"&gt;MESA_INSTALL_PREFIX&lt;/span&gt;&lt;span class="si"&gt;}&lt;/span&gt;/include &lt;span class="se"&gt;\&lt;/span&gt;
+ -DOSMESA_LIBRARY&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="si"&gt;${&lt;/span&gt;&lt;span class="nv"&gt;MESA_INSTALL_PREFIX&lt;/span&gt;&lt;span class="si"&gt;}&lt;/span&gt;/build/linux-x86_64/mesa/drivers/osmesa/libosmesa.so &lt;span class="se"&gt;\&lt;/span&gt;
  ..
 &lt;/pre&gt;&lt;/div&gt;
 
