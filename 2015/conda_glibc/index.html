@@ -51,13 +51,13 @@
                 </header>
             </section>
             <p>If, when using conda (Anaconda or Miniconda), you experience an error that is something like the following:</p>
-<div class="highlight"><pre>ImportError: /home/pts08/miniconda/envs/_test/bin/../lib/libm.so.6: version `GLIBC_2.15&#39; not found (required by /home/pts08/miniconda/envs/_test/lib/python2.7/site-packages/cyffld2/../../../libfftw3f.so.3)
+<div class="highlight"><pre><span></span>ImportError: /home/pts08/miniconda/envs/_test/bin/../lib/libm.so.6: version `GLIBC_2.15&#39; not found (required by /home/pts08/miniconda/envs/_test/lib/python2.7/site-packages/cyffld2/../../../libfftw3f.so.3)
 </pre></div>
 
 
 <p>You can quickly solve this by removing/moving the <code>libm.so.6</code> library so that your packages don't accidentally link against it.</p>
 <p>For example:</p>
-<div class="highlight"><pre>mv /home/pts08/miniconda/envs/_test/bin/../lib/libm.so.6 /home/pts08/miniconda/envs/_test/bin/../lib/libm.so.6.bak
+<div class="highlight"><pre><span></span>mv /home/pts08/miniconda/envs/_test/bin/../lib/libm.so.6 /home/pts08/miniconda/envs/_test/bin/../lib/libm.so.6.bak
 </pre></div>
 
 

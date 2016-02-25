@@ -55,12 +55,12 @@ it upgrading from 13.04 to 14.04. This meant that one of my first tasks
 was to reconfigure my shell how I liked it. Upon searching around, I found
 that the way I had been including the git branch status in my bash prompt
 had been superceded by the following new syntax:</p>
-<div class="highlight"><pre><span class="nb">export </span><span class="nv">GIT_PS1_SHOWUNTRACKEDFILES</span><span class="o">=</span>1
-<span class="nb">export </span><span class="nv">GIT_PS1_SHOWUPSTREAM</span><span class="o">=</span><span class="s2">&quot;auto&quot;</span>
-<span class="nb">export </span><span class="nv">GIT_PS1_SHOWCOLORHINTS</span><span class="o">=</span>1
-<span class="nb">export </span><span class="nv">GIT_PS1_SHOWDIRTYSTATE</span><span class="o">=</span>1
+<div class="highlight"><pre><span></span><span class="nb">export</span> <span class="nv">GIT_PS1_SHOWUNTRACKEDFILES</span><span class="o">=</span>1
+<span class="nb">export</span> <span class="nv">GIT_PS1_SHOWUPSTREAM</span><span class="o">=</span><span class="s2">&quot;auto&quot;</span>
+<span class="nb">export</span> <span class="nv">GIT_PS1_SHOWCOLORHINTS</span><span class="o">=</span>1
+<span class="nb">export</span> <span class="nv">GIT_PS1_SHOWDIRTYSTATE</span><span class="o">=</span>1
 
-<span class="nb">export </span><span class="nv">PROMPT_COMMAND</span><span class="o">=</span><span class="s1">&#39;__git_ps1&#39;</span>
+<span class="nb">export</span> <span class="nv">PROMPT_COMMAND</span><span class="o">=</span><span class="s1">&#39;__git_ps1&#39;</span>
 </pre></div>
 
 
@@ -81,20 +81,20 @@ I found two pieces of important information:</p>
 </ol>
 <p>Therefore, we can make a nice prompt that is friendly to both our git 
 status and our virtualenv status as follows:</p>
-<div class="highlight"><pre><span class="nb">export </span><span class="nv">GIT_PS1_SHOWUNTRACKEDFILES</span><span class="o">=</span>1
-<span class="nb">export </span><span class="nv">GIT_PS1_SHOWUPSTREAM</span><span class="o">=</span><span class="s2">&quot;auto&quot;</span>
-<span class="nb">export </span><span class="nv">GIT_PS1_SHOWCOLORHINTS</span><span class="o">=</span>1
-<span class="nb">export </span><span class="nv">GIT_PS1_SHOWDIRTYSTATE</span><span class="o">=</span>1
-<span class="nb">export </span><span class="nv">VIRTUAL_ENV_DISABLE_PROMPT</span><span class="o">=</span>1
+<div class="highlight"><pre><span></span><span class="nb">export</span> <span class="nv">GIT_PS1_SHOWUNTRACKEDFILES</span><span class="o">=</span>1
+<span class="nb">export</span> <span class="nv">GIT_PS1_SHOWUPSTREAM</span><span class="o">=</span><span class="s2">&quot;auto&quot;</span>
+<span class="nb">export</span> <span class="nv">GIT_PS1_SHOWCOLORHINTS</span><span class="o">=</span>1
+<span class="nb">export</span> <span class="nv">GIT_PS1_SHOWDIRTYSTATE</span><span class="o">=</span>1
+<span class="nb">export</span> <span class="nv">VIRTUAL_ENV_DISABLE_PROMPT</span><span class="o">=</span>1
 
 set_active_venv<span class="o">()</span> <span class="o">{</span>
-    <span class="nb">export </span><span class="nv">ACTIVE_VENV</span><span class="o">=</span><span class="s2">&quot;&quot;</span>
-    <span class="k">if</span> <span class="o">[</span> <span class="s2">&quot;</span><span class="nv">$VIRTUAL_ENV</span><span class="s2">&quot;</span> !<span class="o">=</span> <span class="s2">&quot;&quot;</span> <span class="o">]</span><span class="p">;</span> <span class="k">then</span>
-        <span class="nb">export </span><span class="nv">ACTIVE_VENV</span><span class="o">=</span><span class="s2">&quot;(`basename \&quot;</span><span class="nv">$VIRTUAL_ENV</span><span class="s2">\&quot;`)&quot;</span>
+    <span class="nb">export</span> <span class="nv">ACTIVE_VENV</span><span class="o">=</span><span class="s2">&quot;&quot;</span>
+    <span class="k">if</span> <span class="o">[</span> <span class="s2">&quot;</span>$<span class="s2">VIRTUAL_ENV&quot;</span> !<span class="o">=</span> <span class="s2">&quot;&quot;</span> <span class="o">]</span><span class="p">;</span> <span class="k">then</span>
+        <span class="nb">export</span> <span class="nv">ACTIVE_VENV</span><span class="o">=</span><span class="s2">&quot;(`basename \&quot;</span>$<span class="s2">VIRTUAL_ENV\&quot;`)&quot;</span>
     <span class="k">fi</span>
 <span class="o">}</span>
 
-<span class="nb">export </span><span class="nv">PROMPT_COMMAND</span><span class="o">=</span><span class="s1">&#39;set_active_venv; __git_ps1 &quot;${ACTIVE_VENV}\w&quot; &quot;\\\$ &quot;&#39;</span>
+<span class="nb">export</span> <span class="nv">PROMPT_COMMAND</span><span class="o">=</span><span class="s1">&#39;set_active_venv; __git_ps1 &quot;${ACTIVE_VENV}\w&quot; &quot;\\\$ &quot;&#39;</span>
 </pre></div>
 
 

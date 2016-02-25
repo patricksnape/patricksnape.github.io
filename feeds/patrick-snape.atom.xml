@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <feed xmlns="http://www.w3.org/2005/Atom"><title>patricksnape</title><link href="http://patricksnape.github.io/" rel="alternate"></link><link href="http://patricksnape.github.io/feeds/patrick-snape.atom.xml" rel="self"></link><id>http://patricksnape.github.io/</id><updated>2015-02-13T00:00:00+00:00</updated><entry><title>Conda GLIBC_2.15 Error</title><link href="http://patricksnape.github.io/2015/conda_glibc/" rel="alternate"></link><updated>2015-02-13T00:00:00+00:00</updated><author><name>Patrick Snape</name></author><id>tag:patricksnape.github.io,2015-02-13:2015/conda_glibc/</id><summary type="html">&lt;p&gt;If, when using conda (Anaconda or Miniconda), you experience an error that is something like the following:&lt;/p&gt;
-&lt;div class="highlight"&gt;&lt;pre&gt;ImportError: /home/pts08/miniconda/envs/_test/bin/../lib/libm.so.6: version `GLIBC_2.15&amp;#39; not found (required by /home/pts08/miniconda/envs/_test/lib/python2.7/site-packages/cyffld2/../../../libfftw3f.so.3)
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;ImportError: /home/pts08/miniconda/envs/_test/bin/../lib/libm.so.6: version `GLIBC_2.15&amp;#39; not found (required by /home/pts08/miniconda/envs/_test/lib/python2.7/site-packages/cyffld2/../../../libfftw3f.so.3)
 &lt;/pre&gt;&lt;/div&gt;
 
 
 &lt;p&gt;You can quickly solve this by removing/moving the &lt;code&gt;libm.so.6&lt;/code&gt; library so that your packages don't accidentally link against it.&lt;/p&gt;
 &lt;p&gt;For example:&lt;/p&gt;
-&lt;div class="highlight"&gt;&lt;pre&gt;mv /home/pts08/miniconda/envs/_test/bin/../lib/libm.so.6 /home/pts08/miniconda/envs/_test/bin/../lib/libm.so.6.bak
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;mv /home/pts08/miniconda/envs/_test/bin/../lib/libm.so.6 /home/pts08/miniconda/envs/_test/bin/../lib/libm.so.6.bak
 &lt;/pre&gt;&lt;/div&gt;
 
 
@@ -30,12 +30,12 @@ it upgrading from 13.04 to 14.04. This meant that one of my first tasks
 was to reconfigure my shell how I liked it. Upon searching around, I found
 that the way I had been including the git branch status in my bash prompt
 had been superceded by the following new syntax:&lt;/p&gt;
-&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span class="nb"&gt;export &lt;/span&gt;&lt;span class="nv"&gt;GIT_PS1_SHOWUNTRACKEDFILES&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;1
-&lt;span class="nb"&gt;export &lt;/span&gt;&lt;span class="nv"&gt;GIT_PS1_SHOWUPSTREAM&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s2"&gt;&amp;quot;auto&amp;quot;&lt;/span&gt;
-&lt;span class="nb"&gt;export &lt;/span&gt;&lt;span class="nv"&gt;GIT_PS1_SHOWCOLORHINTS&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;1
-&lt;span class="nb"&gt;export &lt;/span&gt;&lt;span class="nv"&gt;GIT_PS1_SHOWDIRTYSTATE&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;1
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="nb"&gt;export&lt;/span&gt; &lt;span class="nv"&gt;GIT_PS1_SHOWUNTRACKEDFILES&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;1
+&lt;span class="nb"&gt;export&lt;/span&gt; &lt;span class="nv"&gt;GIT_PS1_SHOWUPSTREAM&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s2"&gt;&amp;quot;auto&amp;quot;&lt;/span&gt;
+&lt;span class="nb"&gt;export&lt;/span&gt; &lt;span class="nv"&gt;GIT_PS1_SHOWCOLORHINTS&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;1
+&lt;span class="nb"&gt;export&lt;/span&gt; &lt;span class="nv"&gt;GIT_PS1_SHOWDIRTYSTATE&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;1
 
-&lt;span class="nb"&gt;export &lt;/span&gt;&lt;span class="nv"&gt;PROMPT_COMMAND&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;__git_ps1&amp;#39;&lt;/span&gt;
+&lt;span class="nb"&gt;export&lt;/span&gt; &lt;span class="nv"&gt;PROMPT_COMMAND&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;__git_ps1&amp;#39;&lt;/span&gt;
 &lt;/pre&gt;&lt;/div&gt;
 
 
@@ -56,20 +56,20 @@ I found two pieces of important information:&lt;/p&gt;
 &lt;/ol&gt;
 &lt;p&gt;Therefore, we can make a nice prompt that is friendly to both our git 
 status and our virtualenv status as follows:&lt;/p&gt;
-&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span class="nb"&gt;export &lt;/span&gt;&lt;span class="nv"&gt;GIT_PS1_SHOWUNTRACKEDFILES&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;1
-&lt;span class="nb"&gt;export &lt;/span&gt;&lt;span class="nv"&gt;GIT_PS1_SHOWUPSTREAM&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s2"&gt;&amp;quot;auto&amp;quot;&lt;/span&gt;
-&lt;span class="nb"&gt;export &lt;/span&gt;&lt;span class="nv"&gt;GIT_PS1_SHOWCOLORHINTS&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;1
-&lt;span class="nb"&gt;export &lt;/span&gt;&lt;span class="nv"&gt;GIT_PS1_SHOWDIRTYSTATE&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;1
-&lt;span class="nb"&gt;export &lt;/span&gt;&lt;span class="nv"&gt;VIRTUAL_ENV_DISABLE_PROMPT&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;1
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="nb"&gt;export&lt;/span&gt; &lt;span class="nv"&gt;GIT_PS1_SHOWUNTRACKEDFILES&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;1
+&lt;span class="nb"&gt;export&lt;/span&gt; &lt;span class="nv"&gt;GIT_PS1_SHOWUPSTREAM&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s2"&gt;&amp;quot;auto&amp;quot;&lt;/span&gt;
+&lt;span class="nb"&gt;export&lt;/span&gt; &lt;span class="nv"&gt;GIT_PS1_SHOWCOLORHINTS&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;1
+&lt;span class="nb"&gt;export&lt;/span&gt; &lt;span class="nv"&gt;GIT_PS1_SHOWDIRTYSTATE&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;1
+&lt;span class="nb"&gt;export&lt;/span&gt; &lt;span class="nv"&gt;VIRTUAL_ENV_DISABLE_PROMPT&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;1
 
 set_active_venv&lt;span class="o"&gt;()&lt;/span&gt; &lt;span class="o"&gt;{&lt;/span&gt;
-    &lt;span class="nb"&gt;export &lt;/span&gt;&lt;span class="nv"&gt;ACTIVE_VENV&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s2"&gt;&amp;quot;&amp;quot;&lt;/span&gt;
-    &lt;span class="k"&gt;if&lt;/span&gt; &lt;span class="o"&gt;[&lt;/span&gt; &lt;span class="s2"&gt;&amp;quot;&lt;/span&gt;&lt;span class="nv"&gt;$VIRTUAL_ENV&lt;/span&gt;&lt;span class="s2"&gt;&amp;quot;&lt;/span&gt; !&lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="s2"&gt;&amp;quot;&amp;quot;&lt;/span&gt; &lt;span class="o"&gt;]&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt; &lt;span class="k"&gt;then&lt;/span&gt;
-        &lt;span class="nb"&gt;export &lt;/span&gt;&lt;span class="nv"&gt;ACTIVE_VENV&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s2"&gt;&amp;quot;(`basename \&amp;quot;&lt;/span&gt;&lt;span class="nv"&gt;$VIRTUAL_ENV&lt;/span&gt;&lt;span class="s2"&gt;\&amp;quot;`)&amp;quot;&lt;/span&gt;
+    &lt;span class="nb"&gt;export&lt;/span&gt; &lt;span class="nv"&gt;ACTIVE_VENV&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s2"&gt;&amp;quot;&amp;quot;&lt;/span&gt;
+    &lt;span class="k"&gt;if&lt;/span&gt; &lt;span class="o"&gt;[&lt;/span&gt; &lt;span class="s2"&gt;&amp;quot;&lt;/span&gt;$&lt;span class="s2"&gt;VIRTUAL_ENV&amp;quot;&lt;/span&gt; !&lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="s2"&gt;&amp;quot;&amp;quot;&lt;/span&gt; &lt;span class="o"&gt;]&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt; &lt;span class="k"&gt;then&lt;/span&gt;
+        &lt;span class="nb"&gt;export&lt;/span&gt; &lt;span class="nv"&gt;ACTIVE_VENV&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s2"&gt;&amp;quot;(`basename \&amp;quot;&lt;/span&gt;$&lt;span class="s2"&gt;VIRTUAL_ENV\&amp;quot;`)&amp;quot;&lt;/span&gt;
     &lt;span class="k"&gt;fi&lt;/span&gt;
 &lt;span class="o"&gt;}&lt;/span&gt;
 
-&lt;span class="nb"&gt;export &lt;/span&gt;&lt;span class="nv"&gt;PROMPT_COMMAND&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;set_active_venv; __git_ps1 &amp;quot;${ACTIVE_VENV}\w&amp;quot; &amp;quot;\\\$ &amp;quot;&amp;#39;&lt;/span&gt;
+&lt;span class="nb"&gt;export&lt;/span&gt; &lt;span class="nv"&gt;PROMPT_COMMAND&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;set_active_venv; __git_ps1 &amp;quot;${ACTIVE_VENV}\w&amp;quot; &amp;quot;\\\$ &amp;quot;&amp;#39;&lt;/span&gt;
 &lt;/pre&gt;&lt;/div&gt;
 
 
@@ -86,22 +86,22 @@ provide the same functionality!&lt;/p&gt;</summary><category term="git"></catego
 &lt;p&gt;Unfortunately, the way to do these things changes a lot between VTK versions. I have chosen VTK 5.8 because I am particularly interested in using it for offscreen rendering using Mayavi in Python and Mayavi only (at the time of writing) supports VTK 5.8. Therefore, my examples will assume that we are attempting to use VTK 5.8.&lt;/p&gt;
 &lt;h2&gt;Without showing a window&lt;/h2&gt;
 &lt;p&gt;This is exactly the same as the example given in the Mayavi documentation:&lt;/p&gt;
-&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span class="kn"&gt;from&lt;/span&gt; &lt;span class="nn"&gt;mayavi&lt;/span&gt; &lt;span class="kn"&gt;import&lt;/span&gt; &lt;span class="n"&gt;mlab&lt;/span&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="kn"&gt;from&lt;/span&gt; &lt;span class="nn"&gt;mayavi&lt;/span&gt; &lt;span class="kn"&gt;import&lt;/span&gt; &lt;span class="n"&gt;mlab&lt;/span&gt;
 &lt;span class="n"&gt;mlab&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;options&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;offscreen&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="bp"&gt;True&lt;/span&gt;
 &lt;span class="n"&gt;mlab&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;test_contour3d&lt;/span&gt;&lt;span class="p"&gt;()&lt;/span&gt;
-&lt;span class="n"&gt;mlab&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;savefig&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s"&gt;&amp;#39;example.png&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+&lt;span class="n"&gt;mlab&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;savefig&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;example.png&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
 &lt;/pre&gt;&lt;/div&gt;
 
 
 &lt;p&gt;This just involves setting the offscreen option to &lt;code&gt;True&lt;/code&gt;. However, this assume that you are rendering inside an active X11 session. This obviously implies the existence of a graphics card!&lt;/p&gt;
 &lt;h2&gt;On a headless server (no X11)&lt;/h2&gt;
 &lt;p&gt;This, as documented in the Mayavi documentation, involves providing a virtual X11 buffer. This requires the command &lt;code&gt;xvfb-run&lt;/code&gt;, which can be installed using &lt;code&gt;apt-get&lt;/code&gt;:&lt;/p&gt;
-&lt;div class="highlight"&gt;&lt;pre&gt;sudo apt-get install xvfb
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;sudo apt-get install xvfb
 &lt;/pre&gt;&lt;/div&gt;
 
 
 &lt;p&gt;Once installed, a virtual X11 frame buffer can be provided with the command:&lt;/p&gt;
-&lt;div class="highlight"&gt;&lt;pre&gt;xvfb-run --server-args&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s2"&gt;&amp;quot;-screen 0 1024x768x24&amp;quot;&lt;/span&gt; python my_script.py
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;xvfb-run --server-args&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s2"&gt;&amp;quot;-screen 0 1024x768x24&amp;quot;&lt;/span&gt; python my_script.py
 &lt;/pre&gt;&lt;/div&gt;
 
 
@@ -110,22 +110,22 @@ provide the same functionality!&lt;/p&gt;</summary><category term="git"></catego
 &lt;p&gt;This is when things start to get particularly tricky. In the case, we need to compile a custom version of VTK 5.8 that is linked against an appropriate software renderer. In the case of Linux, this is OSMesa. Now, given that we are running on Linux, we will want to use the fastest software rasterizer we can, which is llvmpipe. Therefore, we begin the complex process of building VTK 5.8 with offscreen rendering support. I was unable to generalise this process, and only able to get it working for very specific versions of the requisite libraries. Confirmation of using more recent versions is greatly appreciated.&lt;/p&gt;
 &lt;h3&gt;Building OSMesa&lt;/h3&gt;
 &lt;p&gt;Download OSMesa 9.2.3 from &lt;a href="ftp://ftp.freedesktop.org/pub/mesa/9.2.3/MesaLib-9.2.3.tar.bz2"&gt;here&lt;/a&gt;. You will need to make sure you have all the dependencies as outlined &lt;a href="http://www.mesa3d.org/install.html"&gt;here&lt;/a&gt;, but most probably, for Ubuntu, you will need&lt;/p&gt;
-&lt;div class="highlight"&gt;&lt;pre&gt;sudo apt-get install scons flex bison
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;sudo apt-get install scons flex bison
 &lt;/pre&gt;&lt;/div&gt;
 
 
 &lt;p&gt;You will also need LLVM with version greater than 3.0. I managed to get it working by installing LLVM 3.2 (though I think 3.3 works as well):&lt;/p&gt;
-&lt;div class="highlight"&gt;&lt;pre&gt;sudo apt-get install llvm-3.2-dev llvm-3.2-source
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;sudo apt-get install llvm-3.2-dev llvm-3.2-source
 &lt;/pre&gt;&lt;/div&gt;
 
 
 &lt;p&gt;Given that we got this from aptitude, it doesn’t seem to setup LLVM properly, so we need to set up the correct sumbolic link to &lt;code&gt;llvm-config&lt;/code&gt;:&lt;/p&gt;
-&lt;div class="highlight"&gt;&lt;pre&gt;sudo ln -s /usr/bin/llvm-config-3.2 /usr/local/bin/llvm-config
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;sudo ln -s /usr/bin/llvm-config-3.2 /usr/local/bin/llvm-config
 &lt;/pre&gt;&lt;/div&gt;
 
 
 &lt;p&gt;We can then build llvmpipe by navigating in to the extracted OSMesa folder and executing:&lt;/p&gt;
-&lt;div class="highlight"&gt;&lt;pre&gt;scons &lt;span class="nv"&gt;llvm&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;yes &lt;span class="nv"&gt;build&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;release mesa osmesa libgl-xlib
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;scons &lt;span class="nv"&gt;llvm&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;yes &lt;span class="nv"&gt;build&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;release mesa osmesa libgl-xlib
 &lt;/pre&gt;&lt;/div&gt;
 
 
@@ -134,7 +134,7 @@ provide the same functionality!&lt;/p&gt;</summary><category term="git"></catego
 &lt;p&gt;Download VTK 5.8 from &lt;a href="http://www.vtk.org/files/release/5.8/vtk-5.8.0.tar.gz"&gt;here&lt;/a&gt;.&lt;/p&gt;
 &lt;p&gt;Unzip it, make a folder called &lt;code&gt;build&lt;/code&gt; inside it and then create a new script inside &lt;code&gt;build&lt;/code&gt; called &lt;code&gt;configure_cmake.sh&lt;/code&gt;.&lt;/p&gt;
 &lt;p&gt;Inside, paste the following script:&lt;/p&gt;
-&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span class="nv"&gt;MESA_INSTALL_PREFIX&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;PATH_TO_MESA_9.2.3_FOLDER
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="nv"&gt;MESA_INSTALL_PREFIX&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;PATH_TO_MESA_9.2.3_FOLDER
 
 cmake &lt;span class="se"&gt;\&lt;/span&gt;
  -DBUILD_SHARED_LIBS&lt;span class="o"&gt;=&lt;/span&gt;ON &lt;span class="se"&gt;\&lt;/span&gt;
@@ -156,37 +156,37 @@ cmake &lt;span class="se"&gt;\&lt;/span&gt;
 &lt;h3&gt;Setting up Mayavi&lt;/h3&gt;
 &lt;p&gt;Create a virtualenv, then &lt;code&gt;cd&lt;/code&gt; to &lt;code&gt;PATH_TO_VTK5.8/build/Wrapping/Python&lt;/code&gt;, where &lt;code&gt;PATH_TO_VTK5.8&lt;/code&gt; is the absolute path to wherever you built VTK 5.8.&lt;/p&gt;
 &lt;p&gt;You can then install it in to the virtualenv by running&lt;/p&gt;
-&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span class="nv"&gt;LD_LIBRARY_PATH&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;PATH_TO_VTK5.8/build/bin/ python setup.py install
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="nv"&gt;LD_LIBRARY_PATH&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;PATH_TO_VTK5.8/build/bin/ python setup.py install
 &lt;/pre&gt;&lt;/div&gt;
 
 
 &lt;p&gt;Then, to test it worked, run&lt;/p&gt;
-&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span class="nv"&gt;LD_LIBRARY_PATH&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;/PATH_TO_VTK5.8/build/bin/ python
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="nv"&gt;LD_LIBRARY_PATH&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;/PATH_TO_VTK5.8/build/bin/ python
 &lt;/pre&gt;&lt;/div&gt;
 
 
 &lt;p&gt;Then try&lt;/p&gt;
-&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span class="kn"&gt;import&lt;/span&gt; &lt;span class="nn"&gt;vtk&lt;/span&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="kn"&gt;import&lt;/span&gt; &lt;span class="nn"&gt;vtk&lt;/span&gt;
 &lt;/pre&gt;&lt;/div&gt;
 
 
 &lt;p&gt;which should work without error. Then install mayavi by running&lt;/p&gt;
-&lt;div class="highlight"&gt;&lt;pre&gt;pip install numpy
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;pip install numpy
 
 &lt;span class="nv"&gt;LD_LIBRARY_PATH&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;/PATH_TO_VTK5.8/build/bin/ pip install mayavi
 &lt;/pre&gt;&lt;/div&gt;
 
 
 &lt;p&gt;Then, we can test everything worked by running&lt;/p&gt;
-&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span class="nv"&gt;LD_LIBRARY_PATH&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;/PATH_TO_VTK5.8/build/bin/ python
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="nv"&gt;LD_LIBRARY_PATH&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;/PATH_TO_VTK5.8/build/bin/ python
 &lt;/pre&gt;&lt;/div&gt;
 
 
 &lt;p&gt;and trying&lt;/p&gt;
-&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span class="kn"&gt;from&lt;/span&gt; &lt;span class="nn"&gt;mayavi&lt;/span&gt; &lt;span class="kn"&gt;import&lt;/span&gt; &lt;span class="n"&gt;mlab&lt;/span&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="kn"&gt;from&lt;/span&gt; &lt;span class="nn"&gt;mayavi&lt;/span&gt; &lt;span class="kn"&gt;import&lt;/span&gt; &lt;span class="n"&gt;mlab&lt;/span&gt;
 &lt;span class="n"&gt;mlab&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;options&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;offscreen&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="bp"&gt;True&lt;/span&gt;
 &lt;span class="n"&gt;mlab&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;test_contour3d&lt;/span&gt;&lt;span class="p"&gt;()&lt;/span&gt;
-&lt;span class="n"&gt;mlab&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;savefig&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s"&gt;&amp;#39;example.png&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+&lt;span class="n"&gt;mlab&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;savefig&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;example.png&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
 &lt;/pre&gt;&lt;/div&gt;
 
 
