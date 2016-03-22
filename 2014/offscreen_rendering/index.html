@@ -62,7 +62,7 @@
 <p>Unfortunately, the way to do these things changes a lot between VTK versions. I have chosen VTK 5.8 because I am particularly interested in using it for offscreen rendering using Mayavi in Python and Mayavi only (at the time of writing) supports VTK 5.8. Therefore, my examples will assume that we are attempting to use VTK 5.8.</p>
 <h2>Without showing a window</h2>
 <p>This is exactly the same as the example given in the Mayavi documentation:</p>
-<div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">mayavi</span> <span class="kn">import</span> <span class="n">mlab</span>
+<div class="highlight"><pre><span class="kn">from</span> <span class="nn">mayavi</span> <span class="kn">import</span> <span class="n">mlab</span>
 <span class="n">mlab</span><span class="o">.</span><span class="n">options</span><span class="o">.</span><span class="n">offscreen</span> <span class="o">=</span> <span class="bp">True</span>
 <span class="n">mlab</span><span class="o">.</span><span class="n">test_contour3d</span><span class="p">()</span>
 <span class="n">mlab</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="s1">&#39;example.png&#39;</span><span class="p">)</span>
@@ -72,12 +72,12 @@
 <p>This just involves setting the offscreen option to <code>True</code>. However, this assume that you are rendering inside an active X11 session. This obviously implies the existence of a graphics card!</p>
 <h2>On a headless server (no X11)</h2>
 <p>This, as documented in the Mayavi documentation, involves providing a virtual X11 buffer. This requires the command <code>xvfb-run</code>, which can be installed using <code>apt-get</code>:</p>
-<div class="highlight"><pre><span></span>sudo apt-get install xvfb
+<div class="highlight"><pre>sudo apt-get install xvfb
 </pre></div>
 
 
 <p>Once installed, a virtual X11 frame buffer can be provided with the command:</p>
-<div class="highlight"><pre><span></span>xvfb-run --server-args<span class="o">=</span><span class="s2">&quot;-screen 0 1024x768x24&quot;</span> python my_script.py
+<div class="highlight"><pre>xvfb-run --server-args<span class="o">=</span><span class="s2">&quot;-screen 0 1024x768x24&quot;</span> python my_script.py
 </pre></div>
 
 
@@ -86,22 +86,22 @@
 <p>This is when things start to get particularly tricky. In the case, we need to compile a custom version of VTK 5.8 that is linked against an appropriate software renderer. In the case of Linux, this is OSMesa. Now, given that we are running on Linux, we will want to use the fastest software rasterizer we can, which is llvmpipe. Therefore, we begin the complex process of building VTK 5.8 with offscreen rendering support. I was unable to generalise this process, and only able to get it working for very specific versions of the requisite libraries. Confirmation of using more recent versions is greatly appreciated.</p>
 <h3>Building OSMesa</h3>
 <p>Download OSMesa 9.2.3 from <a href="ftp://ftp.freedesktop.org/pub/mesa/9.2.3/MesaLib-9.2.3.tar.bz2">here</a>. You will need to make sure you have all the dependencies as outlined <a href="http://www.mesa3d.org/install.html">here</a>, but most probably, for Ubuntu, you will need</p>
-<div class="highlight"><pre><span></span>sudo apt-get install scons flex bison
+<div class="highlight"><pre>sudo apt-get install scons flex bison
 </pre></div>
 
 
 <p>You will also need LLVM with version greater than 3.0. I managed to get it working by installing LLVM 3.2 (though I think 3.3 works as well):</p>
-<div class="highlight"><pre><span></span>sudo apt-get install llvm-3.2-dev llvm-3.2-source
+<div class="highlight"><pre>sudo apt-get install llvm-3.2-dev llvm-3.2-source
 </pre></div>
 
 
 <p>Given that we got this from aptitude, it doesn’t seem to setup LLVM properly, so we need to set up the correct sumbolic link to <code>llvm-config</code>:</p>
-<div class="highlight"><pre><span></span>sudo ln -s /usr/bin/llvm-config-3.2 /usr/local/bin/llvm-config
+<div class="highlight"><pre>sudo ln -s /usr/bin/llvm-config-3.2 /usr/local/bin/llvm-config
 </pre></div>
 
 
 <p>We can then build llvmpipe by navigating in to the extracted OSMesa folder and executing:</p>
-<div class="highlight"><pre><span></span>scons <span class="nv">llvm</span><span class="o">=</span>yes <span class="nv">build</span><span class="o">=</span>release mesa osmesa libgl-xlib
+<div class="highlight"><pre>scons <span class="nv">llvm</span><span class="o">=</span>yes <span class="nv">build</span><span class="o">=</span>release mesa osmesa libgl-xlib
 </pre></div>
 
 
@@ -110,7 +110,7 @@
 <p>Download VTK 5.8 from <a href="http://www.vtk.org/files/release/5.8/vtk-5.8.0.tar.gz">here</a>.</p>
 <p>Unzip it, make a folder called <code>build</code> inside it and then create a new script inside <code>build</code> called <code>configure_cmake.sh</code>.</p>
 <p>Inside, paste the following script:</p>
-<div class="highlight"><pre><span></span><span class="nv">MESA_INSTALL_PREFIX</span><span class="o">=</span>PATH_TO_MESA_9.2.3_FOLDER
+<div class="highlight"><pre><span class="nv">MESA_INSTALL_PREFIX</span><span class="o">=</span>PATH_TO_MESA_9.2.3_FOLDER
 
 cmake <span class="se">\</span>
  -DBUILD_SHARED_LIBS<span class="o">=</span>ON <span class="se">\</span>
@@ -132,34 +132,34 @@ cmake <span class="se">\</span>
 <h3>Setting up Mayavi</h3>
 <p>Create a virtualenv, then <code>cd</code> to <code>PATH_TO_VTK5.8/build/Wrapping/Python</code>, where <code>PATH_TO_VTK5.8</code> is the absolute path to wherever you built VTK 5.8.</p>
 <p>You can then install it in to the virtualenv by running</p>
-<div class="highlight"><pre><span></span><span class="nv">LD_LIBRARY_PATH</span><span class="o">=</span>PATH_TO_VTK5.8/build/bin/ python setup.py install
+<div class="highlight"><pre><span class="nv">LD_LIBRARY_PATH</span><span class="o">=</span>PATH_TO_VTK5.8/build/bin/ python setup.py install
 </pre></div>
 
 
 <p>Then, to test it worked, run</p>
-<div class="highlight"><pre><span></span><span class="nv">LD_LIBRARY_PATH</span><span class="o">=</span>/PATH_TO_VTK5.8/build/bin/ python
+<div class="highlight"><pre><span class="nv">LD_LIBRARY_PATH</span><span class="o">=</span>/PATH_TO_VTK5.8/build/bin/ python
 </pre></div>
 
 
 <p>Then try</p>
-<div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">vtk</span>
+<div class="highlight"><pre><span class="kn">import</span> <span class="nn">vtk</span>
 </pre></div>
 
 
 <p>which should work without error. Then install mayavi by running</p>
-<div class="highlight"><pre><span></span>pip install numpy
+<div class="highlight"><pre>pip install numpy
 
 <span class="nv">LD_LIBRARY_PATH</span><span class="o">=</span>/PATH_TO_VTK5.8/build/bin/ pip install mayavi
 </pre></div>
 
 
 <p>Then, we can test everything worked by running</p>
-<div class="highlight"><pre><span></span><span class="nv">LD_LIBRARY_PATH</span><span class="o">=</span>/PATH_TO_VTK5.8/build/bin/ python
+<div class="highlight"><pre><span class="nv">LD_LIBRARY_PATH</span><span class="o">=</span>/PATH_TO_VTK5.8/build/bin/ python
 </pre></div>
 
 
 <p>and trying</p>
-<div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">mayavi</span> <span class="kn">import</span> <span class="n">mlab</span>
+<div class="highlight"><pre><span class="kn">from</span> <span class="nn">mayavi</span> <span class="kn">import</span> <span class="n">mlab</span>
 <span class="n">mlab</span><span class="o">.</span><span class="n">options</span><span class="o">.</span><span class="n">offscreen</span> <span class="o">=</span> <span class="bp">True</span>
 <span class="n">mlab</span><span class="o">.</span><span class="n">test_contour3d</span><span class="p">()</span>
 <span class="n">mlab</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="s1">&#39;example.png&#39;</span><span class="p">)</span>
